@@ -1,0 +1,1 @@
+![minesweeper](https://github.com/RoyVoetman/CS50-AI/blob/master/.docs/tictactoe.jpg?raw=true)
