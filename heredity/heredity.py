@@ -166,7 +166,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
                     And(fatherPassing, Not(motherPassing))
                 )
             elif (personGenes == 2):
-                probability = probability * (motherPassing * fatherPassing)
+                probability = probability * And(motherPassing, fatherPassing)
         
         # Probabilty having given trait
         probability = probability * (PROBS['trait'][personGenes][person in have_trait])
