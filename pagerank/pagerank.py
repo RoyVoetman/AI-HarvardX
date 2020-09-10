@@ -12,7 +12,6 @@ def main():
     if len(sys.argv) != 2:
         sys.exit("Usage: python pagerank.py corpus")
     corpus = crawl(sys.argv[1])
-    print(corpus)
     ranks = sample_pagerank(corpus, DAMPING, SAMPLES)
     print(f"PageRank Results from Sampling (n = {SAMPLES})")
     for page in sorted(ranks):
@@ -146,15 +145,12 @@ def iterate_pagerank(corpus, damping_factor):
 
         # calculate new pagerank voor all pages
         for page in allPages:
-            sigma = 0
-            for linkedPage in corpus[page]:
-                numLinks = len(corpus[linkedPage])
-                # A page that has no links at all should be interpreted 
-                # as having one link for every page
-                if numLinks == 0:
-                    numLinks = len(allPages)
-                
-                sigma = sigma + pageRank[linkedPage] / numLinks
+            sigma = 0.0
+            for i in allPages:
+                if page in corpus[i]:           
+                    sigma = sigma + pageRank[i] / len(corpus[i])
+                if not corpus[i]:
+                    sigma = sigma + pageRank[i] / n
 
             newPageRank[page] = ((1 - damping_factor) / n) + damping_factor * sigma
 
@@ -165,7 +161,7 @@ def iterate_pagerank(corpus, damping_factor):
 
 def has_converged(oldPageRank, newPageRank, allPages):
     for page in allPages:
-        if math.floor(newPageRank[page] * 1000) != math.floor(oldPageRank[page] * 1000):
+        if abs(newPageRank[page] - oldPageRank[page]) > 0.001:
             return False
 
     return True
